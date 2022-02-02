@@ -18,6 +18,7 @@ public class Main extends JFrame implements ActionListener{
         JButton addState = new JButton("Ajout d'état");
         JButton addTransition = new JButton("Ajout de transition");
         JButton showAutomate = new JButton("Afficher l'automate");
+        JButton testEntree = new JButton("Tester une expression");
 
         title.setBounds(125,20,350,20);
         title.setFont(new Font("Montserat", Font.PLAIN, 18));
@@ -30,14 +31,19 @@ public class Main extends JFrame implements ActionListener{
         addTransition.setBackground(Color.decode("#bdc3c7"));
         addTransition.setBorder(new LineBorder(Color.BLACK));
 
-        showAutomate.setBounds(175, 170,150,50);
+        showAutomate.setBounds(70,165,150,50);
         showAutomate.setBackground(Color.decode("#bdc3c7"));
         showAutomate.setBorder(new LineBorder(Color.BLACK));
+
+        testEntree.setBounds(280,165,150,50);
+        testEntree.setBackground(Color.decode("#bdc3c7"));
+        testEntree.setBorder(new LineBorder(Color.BLACK));
 
         this.add(title);
         this.add(addState);
         this.add(addTransition);
         this.add(showAutomate);
+        this.add(testEntree);
 
         // ActionListener
         addState.addActionListener(this);
@@ -46,6 +52,8 @@ public class Main extends JFrame implements ActionListener{
         addTransition.setActionCommand("transition");
         showAutomate.addActionListener(this);
         showAutomate.setActionCommand("showAutomate");
+        testEntree.addActionListener(this);
+        testEntree.setActionCommand("test");
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -66,6 +74,11 @@ public class Main extends JFrame implements ActionListener{
 
         if(e.getActionCommand().equals("showAutomate")){
             new showAutomate();
+        }
+
+        if(e.getActionCommand().equals("test")){
+            new testEntree();
+            Automate.setGraph();
         }
     }
 
