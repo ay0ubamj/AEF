@@ -1,14 +1,54 @@
-import javax.swing.*;
 import java.util.*;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Automate {
     private static ArrayList<Etat> etats;
     private static ArrayList<Transition> transitions;
+    private static String etatInitial;
+    private static ArrayList<String> etatsFinaux;
+    static HashMap<String, HashMap<String, String>> Graph;
 
     public Automate() {
         etats = new ArrayList<Etat>();
         transitions = new ArrayList<Transition>();
+        etatsFinaux = new ArrayList<String>();
+    }
+
+    public static void setGraph(){
+        // Construction du graphe
+        Graph = new HashMap<String, HashMap<String, String>>();
+        for(Etat e: etats){
+            Graph.put(e.getContenu(), new HashMap<String, String>());
+        }
+
+        // Ajouter les bords adjacents à chaque noeud
+        for(Transition t: getTransitions()){
+            for(String i : Graph.keySet()) {
+                if(t.getSrc().getContenu() == i){
+                    Graph.get(i).put(t.getTrans(), t.getDest().getContenu());
+                }
+            }
+        }
+    }
+
+    public static boolean testEntree(String entree){
+        boolean ok = false;
+
+        HashMap<String, String> iterator = Graph.get(etatInitial);
+        String node = null;
+        for(int i=0; i<entree.length(); i++){
+            node = iterator.get(String.valueOf(entree.charAt(i)));
+            iterator = Graph.get(node);
+            if(iterator.isEmpty()){
+                break;
+            }
+        }
+
+        if(etatsFinaux.contains(node)){
+            ok = true;
+        }
+
+        return ok;
     }
 
     public static void addEtat(Etat etat) {
@@ -28,6 +68,11 @@ public class Automate {
         }
         if(r == 0){
             etats.add(etat);
+            if(etat.getType() == "einit"){
+                etatInitial = etat.getContenu();
+            } else if(etat.getType() == "ef"){
+                etatsFinaux.add(etat.getContenu());
+            }
             showMessageDialog(null, "L'état a été ajouter avec succès !");
         }
     }
@@ -46,27 +91,12 @@ public class Automate {
         return r;
     }
 
-    public static Etat getEtatInit(){
-        Etat eInit = null;
-        for(Etat e: etats){
-            if(e.getType().equals("einit")){
-                eInit = e;
-                break;
-            }
-        }
-        return eInit;
+    public static String getEtatInit(){
+        return etatInitial;
     }
 
     public static String getEtatsFinal(){
-        String s = "       [";
-
-        for(Etat e: etats){
-            if(e.getType().equals("ef")){
-                s+= e.getContenu() +", ";
-            }
-        }
-
-        return s + "]";
+        return String.join(",", etatsFinaux);
     }
 
     public static ArrayList<String> getEtatsContenu() {

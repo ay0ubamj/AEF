@@ -14,7 +14,7 @@ public class showAutomate extends JFrame {
         this.setLayout(null);
         this.setSize(500,300);
 
-        etatInit = new JLabel("Etat initial :         " +Automate.getEtatInit().getContenu());
+        etatInit = new JLabel("Etat initial :         " +Automate.getEtatInit());
         etatInit.setBounds(50,20,100,20);
         this.add(etatInit);
 
